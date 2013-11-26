@@ -2,25 +2,26 @@ defmodule Vinz.Access.Domains do
   require Ecto.Query
 
   alias Ecto.Query, as: Q
-  alias Vinz.Access.Models.Filter
+  alias Vinz.Access.Models.Right
   alias Vinz.Access.Models.GroupMember
 
-  def get(repo, user_id, resource, mode // :read) do
-    base_domain_query = Q.from(f in Filter, select: f.domain)
-      |> Q.where([f], f.resource == ^resource)
+  def get(repo, principal_id, resource, mode // :read) do
+    base_domain_query = Q.from(r in Right, select: r.domain)
+      |> Q.where([r], r.resource == ^resource)
+      |> Q.where([r], r.domain != nil)
       |> filter_on_mode(mode)
 
-    global_domains = Q.where(base_domain_query, [f], f.global)
+    global_domains = Q.where(base_domain_query, [r], r.global)
       |> repo.all
       |> join
 
     user_group_ids = Q.from(m in GroupMember, select: m.vinz_access_group_id)
-      |> Q.where([m], m.vinz_access_user_id == ^user_id)
+      |> Q.where([m], m.vinz_access_principal_id == ^principal_id)
       |> repo.all
     
     group_domains =
       if Enum.count(user_group_ids) > 0 do
-        Q.where(base_domain_query, [f], f.vinz_access_group_id in ^user_group_ids)
+        Q.where(base_domain_query, [r], r.vinz_access_group_id in ^user_group_ids)
           |> repo.all
           |> join("or")
       else
@@ -29,7 +30,6 @@ defmodule Vinz.Access.Domains do
 
     join([global_domains, group_domains])
   end
-
 
   def filter_on_mode(query, :create) do
     Q.where(query, [rule], rule.can_create)

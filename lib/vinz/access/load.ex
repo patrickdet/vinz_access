@@ -1,7 +1,6 @@
 defmodule Vinz.Access.Load do
   alias Vinz.Access.Models.Group
   alias Vinz.Access.Models.Right
-  alias Vinz.Access.Models.Filter
 
   def load_string(string) when is_binary(string) do
     Code.eval_string(string, [], [ delegate_locals_to: __MODULE__ ])
@@ -16,7 +15,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Right.Entity[name: name, resource: resource, global: true,
+    Right.Entity[name: name, resource: resource, domain: nil, global: true,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> repo.create
   end
@@ -27,7 +26,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Right.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id,
+    Right.Entity[name: name, resource: resource, domain: nil, global: false, vinz_access_group_id: group_id,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> repo.create
   end
@@ -37,7 +36,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Filter.Entity[name: name, resource: resource, global: true, domain: domain,
+    Right.Entity[name: name, resource: resource, global: true, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> repo.create
   end
@@ -48,7 +47,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Filter.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id, domain: domain,
+    Right.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> repo.create
   end

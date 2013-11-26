@@ -1,14 +1,10 @@
 defmodule Vinz.Access.Models do
 
-defmodule User do
+defmodule Principal do
   use Ecto.Model
 
-  queryable "vinz_access_user" do
-    field :username, :string
-    field :first_name, :string
-    field :last_name, :string
-    field :password_hash, :binary
-    field :status, :string
+  queryable "vinz_access_principal" do
+    field :name, :string
   end
 
   def hash_password(plaintext) do
@@ -39,7 +35,7 @@ defmodule GroupMember do
 
   queryable "vinz_access_group_member" do
     field :vinz_access_group_id, :integer
-    field :vinz_access_user_id, :integer
+    field :vinz_access_principal_id, :integer
   end
 end
 
@@ -51,28 +47,12 @@ defmodule Right do
     field :name, :string
     field :resource, :string
     field :global, :boolean
+    field :domain, :string
     field :vinz_access_group_id, :integer
     field :can_create, :boolean
     field :can_read, :boolean
     field :can_update, :boolean
     field :can_delete, :boolean
-  end
-end
-
-
-defmodule Filter do
-  use Ecto.Model
-
-  queryable "vinz_access_filter" do
-    field :name, :string
-    field :resource, :string
-    field :global, :boolean
-    field :vinz_access_group_id, :integer
-    field :domain, :string
-    field :can_create, :boolean, default: false
-    field :can_read, :boolean, default: false
-    field :can_update, :boolean, default: false
-    field :can_delete, :boolean, default: false
   end
 end
 
