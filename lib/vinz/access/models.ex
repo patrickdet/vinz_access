@@ -8,10 +8,12 @@ defmodule User do
     field :first_name, :string
     field :last_name, :string
     field :password_hash, :binary
+    field :status, :string
   end
 
   def hash_password(plaintext) do
-    
+    { :ok, hash } = :scrypt.hash(plaintext)
+    hash
   end
 end
 
