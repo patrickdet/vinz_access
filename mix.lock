@@ -1,3 +1,4 @@
-[ "ecto": {:git, "git://github.com/elixir-lang/ecto.git", "e0c773ddfb0eddefd290d7ff0e72898ecd46e007", []},
-  "poolboy": {:git, "git://github.com/devinus/poolboy.git", "c2c939b51aba06790ca51fa78b14c254a6ea977d", []},
-  "postgrex": {:git, "git://github.com/ericmj/postgrex.git", "3424ee5334af9f52cde3a2f90a452e73fd20be0f", []} ]
+%{"decimal": {:git, "git://github.com/ericmj/decimal.git", "626aeb1273949c9c95ef7d4f1f630fb98dccd2af", []},
+  "ecto": {:git, "git://github.com/elixir-lang/ecto.git", "39e003ee39e2ba3f9bf47ef3ec0abd4f33d6d524", []},
+  "poolboy": {:git, "git://github.com/devinus/poolboy.git", "64e1eaef0b1e88849c7e7ba9ff75f8cd4dba2a3b", []},
+  "postgrex": {:git, "git://github.com/ericmj/postgrex.git", "7bb042d90d80fcfe396408af77a505173912b153", []}}

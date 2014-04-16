@@ -5,7 +5,7 @@ defmodule Vinz.Access.Domains do
   alias Vinz.Access.Models.Right
   alias Vinz.Access.Models.GroupMember
 
-  def get(repo, principal_id, resource, mode // :read) do
+  def get(repo, principal_id, resource, mode \\ :read) do
     base_domain_query = Q.from(r in Right, select: r.domain)
       |> Q.where([r], r.resource == ^resource)
       |> Q.where([r], r.domain != nil)
@@ -18,7 +18,7 @@ defmodule Vinz.Access.Domains do
     user_group_ids = Q.from(m in GroupMember, select: m.vinz_access_group_id)
       |> Q.where([m], m.vinz_access_principal_id == ^principal_id)
       |> repo.all
-    
+
     group_domains =
       if Enum.count(user_group_ids) > 0 do
         Q.where(base_domain_query, [r], r.vinz_access_group_id in ^user_group_ids)
@@ -45,7 +45,7 @@ defmodule Vinz.Access.Domains do
   end
 
 
-  def join(domains, op // "and") do
+  def join(domains, op \\ "and") do
     domains |> Enum.filter(&(String.length(&1) > 0)) |> wrap |> Enum.join(" #{op} ")
   end
 

@@ -7,7 +7,7 @@ defmodule Vinz.Access.Load do
   end
 
   def group(repo, name, comment) do
-    Group.Entity[name: name, comment: comment] |> repo.create
+    Group.Entity[name: name, comment: comment] |> repo.insert
   end
 
   def right(repo, name, resource, modes) do
@@ -17,7 +17,7 @@ defmodule Vinz.Access.Load do
     delete? = :delete in modes
     Right.Entity[name: name, resource: resource, domain: nil, global: true,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
-    |> repo.create
+    |> repo.insert
   end
 
   def right(repo, name, resource, group_name, modes) do
@@ -28,7 +28,7 @@ defmodule Vinz.Access.Load do
     delete? = :delete in modes
     Right.Entity[name: name, resource: resource, domain: nil, global: false, vinz_access_group_id: group_id,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
-    |> repo.create
+    |> repo.insert
   end
 
   def filter(repo, name, resource, domain, modes) do
@@ -38,7 +38,7 @@ defmodule Vinz.Access.Load do
     delete? = :delete in modes
     Right.Entity[name: name, resource: resource, global: true, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
-    |> repo.create
+    |> repo.insert
   end
 
   def filter(repo, name, resource, group_name, domain, modes) do
@@ -49,13 +49,13 @@ defmodule Vinz.Access.Load do
     delete? = :delete in modes
     Right.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
-    |> repo.create
+    |> repo.insert
   end
 
   defp group_id!(repo, name) do
     group = Process.get({ :group, name })
     unless group do
-      group = repo.all(Group.by_name(name)) |> Enum.first
+      group = repo.all(Group.by_name(name)) |> List.first
       unless group, do: raise "Group #{name} was not found"
       Process.put({ :group, name }, group)
     end

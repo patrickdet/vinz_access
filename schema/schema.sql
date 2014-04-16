@@ -2,7 +2,6 @@ drop table if exists vinz_access_group_member;
 drop table if exists vinz_access_group;
 drop table if exists vinz_access_principal;
 drop table if exists vinz_access_right;
-drop table if exists vinz_access_filter;
 
 create table vinz_access_principal (
   id serial primary key,
