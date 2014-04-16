@@ -4,7 +4,7 @@ defmodule Vinz.Access.Mixfile do
   def project do
     [ app: :vinz_access,
       version: "0.0.1",
-      elixir: "~> 0.11.1",
+      elixir: "~> 0.13.0-dev",
       deps: deps ]
   end
 

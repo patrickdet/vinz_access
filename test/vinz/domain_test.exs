@@ -1,6 +1,6 @@
 defmodule Vinz.Domain.Test do
   use Vinz.Access.TestCase
-  
+
   alias Vinz.Access.Test.Repo
 
   alias Vinz.Access.Domains
@@ -12,14 +12,17 @@ defmodule Vinz.Domain.Test do
   setup_all do
     begin
     resource = "domain-test-resource"
-    p = Principal.new(name: "domain-test") |> Repo.create
-    g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.create
-    m = GroupMember.new(vinz_access_group_id: g.id, vinz_access_principal_id: p.id) |> Repo.create
-    Right.new(name: "global-test-filter", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
-    Right.new(name: "group-specific-filter-read", resource: resource, global: false, vinz_access_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
-    Right.new(name: "group-specific-filter-write-u", resource: resource, global: false, vinz_access_group_id: g.id, domain: "U", can_update: true) |> Repo.create
-    Right.new(name: "group-specific-filter-write-c", resource: resource, global: false, vinz_access_group_id: g.id, domain: "C", can_create: true) |> Repo.create
-    Right.new(name: "group-specific-filter-write-d", resource: resource, global: false, vinz_access_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
+    p = Principal.new(name: "domain-test") |> Repo.insert
+    g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.insert
+    m = GroupMember.new(vinz_access_group_id: g.id, vinz_access_principal_id: p.id) |> Repo.insert
+    [
+      Right.new(name: "global-test-filter", resource: resource, global: true, domain: "G", can_read: true),
+      Right.new(name: "group-specific-filter-read", resource: resource, global: false, vinz_access_group_id: g.id, domain: "GSR", can_read: true),
+      Right.new(name: "group-specific-filter-write-u", resource: resource, global: false, vinz_access_group_id: g.id, domain: "U", can_update: true),
+      Right.new(name: "group-specific-filter-write-c", resource: resource, global: false, vinz_access_group_id: g.id, domain: "C", can_create: true),
+      Right.new(name: "group-specific-filter-write-d", resource: resource, global: false, vinz_access_group_id: g.id, domain: "D", can_delete: true)
+    ] |> Enum.each &Repo.insert/1
+
     { :ok, [ principal: p, group: g, group_member: m, resource: resource ] }
   end
 
@@ -27,11 +30,11 @@ defmodule Vinz.Domain.Test do
 
   test :join_domains do
     import Domains, only: [ join: 1, join: 2 ]
-    
+
     assert "" == join([])
-    assert "a" == join(%w(a))
-    assert "(a) and (b)" == join(%w(a b))
-    assert "(a) and ((b) or (c))" == join([join(%w(a)), join(%w(b c), "or")])
+    assert "a" == join(~w(a))
+    assert "(a) and (b)" == join(~w(a b))
+    assert "(a) and ((b) or (c))" == join([join(~w(a)), join(~w(b c), "or")])
   end
 
   test :getting_user_domains, context do

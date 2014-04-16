@@ -52,7 +52,7 @@ defmodule Vinz.Access do
         |> Q.where([r], r.domain == nil)
         |> select(mode)
         |> repo.all
-        |> Enum.first
+        |> List.first
 
       !!access
     else
