@@ -2,8 +2,8 @@ language: erlang
 notifications:
   recipients:
     - patrick.detlefsen@gmail.com
+    - kurt.r.williams@gmail.com
 otp_release:
-  - 17.0-rc1
   - 17.0
 addons:
   postgresql: "9.3"
