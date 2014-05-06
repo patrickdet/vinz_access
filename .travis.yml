@@ -1,8 +1,4 @@
 language: erlang
-notifications:
-  recipients:
-    - patrick.detlefsen@gmail.com
-    - kurt.r.williams@gmail.com
 otp_release:
   - 17.0
 addons:
@@ -12,8 +8,15 @@ before_install:
   - cd elixir && make && cd ..
 before_script:
   - export PATH=`pwd`/elixir/bin:$PATH
+  - mix local.hex --force
   - MIX_ENV=test mix do deps.get
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - psql -U postgres travis_ci_test < schema/schema.sql
+  - export PATH=`pwd`/elixir/bin:$PATH
+  - MIX_ENV=test mix do deps.get
+  - psql -c 'create database vinz;' -U postgres
+  - psql -U postgres vinz < schema/schema.sql
 script:
-  - MIX_ENV=all mix test
+  - mix test
+notifications:
+  recipients:
+    - patrick.detlefsen@gmail.com
+    # - kurt.r.williams@gmail.com
